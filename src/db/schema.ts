@@ -1,5 +1,6 @@
 import {
   boolean,
+  foreignKey,
   pgTable,
   serial,
   timestamp,
@@ -30,27 +31,23 @@ export const users = pgTable('users', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-export const products = pgTable('product', {
+export const products = pgTable('products', {
   id: serial('id').primaryKey(),
+  bakeryId: serial('bakery_id').references(() => bakeries.id),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 256 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-export const productReviews = pgTable('review', {
+export const recipes = pgTable('recipes', {
+  id: serial('id').primaryKey(),
+});
+
+export const reviews = pgTable('reviews', {
   id: serial('id').primaryKey(),
   userId: serial('user_id').notNull(),
   productId: serial('product_id').notNull(),
   rating: serial('rating').notNull(),
   comment: varchar('comment', { length: 256 }).notNull(),
-});
-
-export const orders = pgTable('order', {
-  id: serial('id').primaryKey(),
-  // bakeryId: serial('bakery_id').notNull(),
-  // userId: serial('user_id').notNull(),
-  // productId: serial('product_id').notNull(),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
