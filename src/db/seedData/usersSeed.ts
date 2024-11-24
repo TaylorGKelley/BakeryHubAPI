@@ -1,7 +1,8 @@
-import { users } from '../schema';
+import { users } from '../schema/users';
 
-export default [
+export const usersSeed = [
 	{
+		id: 1,
 		firstName: 'John',
 		lastName: 'Doe',
 		email: 'john.doe@example.com',

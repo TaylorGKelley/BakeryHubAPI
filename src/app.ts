@@ -4,6 +4,6 @@ import bakeriesRouter from './router/bakeriesRouter';
 const app = express();
 app.use(express.json());
 
-app.use(bakeriesRouter);
+app.use('/bakeries', bakeriesRouter);
 
 export default app;
