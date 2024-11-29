@@ -5,8 +5,9 @@ import {
 	timestamp,
 	varchar,
 } from 'drizzle-orm/pg-core';
+import { bakeriesTable } from './bakeries.schema';
 
-export const users = pgTable('users', {
+export const usersTable = pgTable('users', {
 	id: serial('id').primaryKey(),
 	firstName: varchar('first_name', { length: 256 }).notNull(),
 	lastName: varchar('last_name', { length: 256 }).notNull(),
@@ -19,4 +20,18 @@ export const users = pgTable('users', {
 	lastLogin: timestamp('last_login').notNull().defaultNow(),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const userFavoriteBakeriesTable = pgTable('user_favorite_bakeries', {
+	id: serial('id').primaryKey(),
+	userId: serial('user_id')
+		.references(() => usersTable.id, {
+			onDelete: 'cascade',
+		})
+		.notNull(),
+	bakeryId: serial('bakery_id')
+		.references(() => bakeriesTable.id, {
+			onDelete: 'cascade',
+		})
+		.notNull(),
 });

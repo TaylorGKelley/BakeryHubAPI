@@ -5,13 +5,13 @@ import {
 	text,
 	timestamp,
 } from 'drizzle-orm/pg-core';
-import { users } from './users';
-import { products } from './products';
-import { recipes } from './recipes';
+import { usersTable } from './users.schema';
+import { products } from './products.schema';
+import { recipes } from './recipes.schema';
 
 export const reviews = pgTable('reviews', {
 	id: serial('id').primaryKey(),
-	userId: serial('user_id').references(() => users.id),
+	userId: serial('user_id').references(() => usersTable.id),
 	productId: serial('product_id').references(() => products.id, {
 		onDelete: 'cascade',
 	}),

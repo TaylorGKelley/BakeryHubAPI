@@ -3,7 +3,7 @@ import {
 	recipeIngredients,
 	recipes,
 	recipeSteps,
-} from '../schema/recipes';
+} from '../schema/recipes.schema';
 import { strawberryShortcakeImage } from './data/imagesBase';
 
 export const recipesSeed = [

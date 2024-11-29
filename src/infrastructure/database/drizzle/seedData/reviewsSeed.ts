@@ -1,4 +1,4 @@
-import { reviews } from '../schema/reviews';
+import { reviews } from '../schema/reviews.schema';
 
 export const reviewsSeed = [
 	{

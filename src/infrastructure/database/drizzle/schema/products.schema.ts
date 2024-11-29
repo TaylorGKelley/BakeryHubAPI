@@ -8,13 +8,13 @@ import {
 	timestamp,
 	varchar,
 } from 'drizzle-orm/pg-core';
-import { bakeries } from './bakeries';
+import { bakeriesTable } from './bakeries.schema';
 import bytea from './types/bytea';
 
-export const products = pgTable('products', {
+export const productsTable = pgTable('products', {
 	id: serial('id').primaryKey(),
 	bakeryId: serial('bakery_id')
-		.references(() => bakeries.id)
+		.references(() => bakeriesTable.id)
 		.notNull(),
 	name: varchar('name', { length: 256 }).notNull(),
 	price: decimal('price', { precision: 5, scale: 2 }).notNull(),
@@ -27,10 +27,10 @@ export const products = pgTable('products', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-export const productImages = pgTable('product_images', {
+export const productImagesTable = pgTable('product_images', {
 	id: serial('id').primaryKey(),
 	productId: serial('product_id')
-		.references(() => products.id, {
+		.references(() => productsTable.id, {
 			onDelete: 'cascade',
 		})
 		.notNull(),
@@ -39,10 +39,10 @@ export const productImages = pgTable('product_images', {
 	order: integer('order').notNull(),
 });
 
-export const productIngredients = pgTable('product_ingredients', {
+export const productIngredientsTable = pgTable('product_ingredients', {
 	id: serial('id').primaryKey(),
 	productId: serial('product_id')
-		.references(() => products.id, {
+		.references(() => productsTable.id, {
 			onDelete: 'cascade',
 		})
 		.notNull(),

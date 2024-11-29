@@ -8,12 +8,12 @@ import {
 	timestamp,
 	varchar,
 } from 'drizzle-orm/pg-core';
-import { bakeries } from './bakeries';
+import { bakeriesTable } from './bakeries.schema';
 import bytea from './types/bytea';
 
 export const recipes = pgTable('recipes', {
 	id: serial('id').primaryKey(),
-	bakeryId: serial('bakery_id').references(() => bakeries.id, {
+	bakeryId: serial('bakery_id').references(() => bakeriesTable.id, {
 		onDelete: 'cascade',
 	}),
 	name: varchar('name', { length: 256 }).notNull(),

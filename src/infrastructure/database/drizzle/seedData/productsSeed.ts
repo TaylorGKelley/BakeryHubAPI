@@ -2,7 +2,7 @@ import {
 	productImages,
 	productIngredients,
 	products,
-} from '../schema/products';
+} from '../schema/products.schema';
 import { strawberryShortcakeImage } from './data/imagesBase';
 
 export const productsSeed = [

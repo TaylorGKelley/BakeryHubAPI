@@ -1,4 +1,4 @@
-import { users } from '../schema/users';
+import { users } from '../schema/users.schema';
 
 export const usersSeed = [
 	{

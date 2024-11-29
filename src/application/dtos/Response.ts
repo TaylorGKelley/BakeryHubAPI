@@ -9,5 +9,5 @@ export type DataResponse<T = any> = GenericResponse & {
 
 export type ErrorResponse = GenericResponse & {
 	errorName: string;
-	stack: string;
+	stack?: string;
 };

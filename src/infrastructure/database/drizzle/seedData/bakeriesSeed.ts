@@ -4,7 +4,7 @@ import {
 	bakeryMenuItems,
 	bakeryImages,
 	bakeryFavorites,
-} from '../schema/bakeries';
+} from '../schema/bakeries.schema';
 import { strawberryShortcakeImage } from './data/imagesBase';
 
 export const bakeriesSeed = [

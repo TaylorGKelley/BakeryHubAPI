@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"main": "server.ts",
 	"scripts": {
-		"dev": "nodemon src/presentation/express/settings/server.ts",
+		"dev": "nodemon src/server.ts",
 		"db:generate": "drizzle-kit generate:pg",
 		"db:migrate": "drizzle-kit migrate:pg",
 		"db:seed": "nodemon ./src/db/seed.ts"
