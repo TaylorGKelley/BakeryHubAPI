@@ -8,7 +8,6 @@
 
 I am using this project to learn the following
 
-- Clean Architecture principles [ref: Medium post regarding Clean Architecture](https://medium.com/@deivisonisidoro_94304/revolutionizing-software-development-unveiling-the-power-of-clean-architecture-with-typescript-5ee968357d35)
 - _Authentication_
   - Access token (exp: 15min) with Refresh token (exp: 30d)
   - Cookie settings for prod should include:
@@ -27,3 +26,26 @@ I am using this project to learn the following
 When using a fetch request, use { credentials: 'include' } to pass the cookies down to the api easily
 
 - Postgres and [Drizzle orm](https://orm.drizzle.team) for Database access
+
+## Routes
+
+### Me
+
+- User Info
+- Update my info
+- Delete
+- Logout of all devices (delete refresh tokens)
+- Change password (for email logins)
+  Me/Bakery
+- Update bakery tables
+- Send invites to bakery
+- Delete bakery
+- Manage products
+
+### Info/Products / Info/Bakeries / Info/Recipes
+
+- Get products and bakeries and recipes
+
+### Auth
+
+- Auth routes

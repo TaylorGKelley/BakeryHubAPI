@@ -11,7 +11,7 @@ import {
 import { bakeriesTable } from './bakeries.schema';
 import bytea from './types/bytea';
 
-export const recipes = pgTable('recipes', {
+export const recipesTable = pgTable('recipes', {
 	id: serial('id').primaryKey(),
 	bakeryId: serial('bakery_id').references(() => bakeriesTable.id, {
 		onDelete: 'cascade',
@@ -25,26 +25,26 @@ export const recipes = pgTable('recipes', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
-export const recipeIngredients = pgTable('recipe_ingredients', {
+export const recipeIngredientsTable = pgTable('recipe_ingredients', {
 	id: serial('id').primaryKey(),
-	recipeId: serial('recipe_id').references(() => recipes.id, {
+	recipeId: serial('recipe_id').references(() => recipesTable.id, {
 		onDelete: 'cascade',
 	}),
 	name: varchar('name', { length: 256 }).notNull(),
 	quantity: varchar('quantity', { length: 256 }).notNull(),
 });
 
-export const recipeSteps = pgTable('recipe_steps', {
+export const recipeStepsTable = pgTable('recipe_steps', {
 	id: serial('id').primaryKey(),
-	recipeId: serial('recipe_id').references(() => recipes.id, {
+	recipeId: serial('recipe_id').references(() => recipesTable.id, {
 		onDelete: 'cascade',
 	}),
 	description: text('description').notNull(),
 });
 
-export const recipeImages = pgTable('recipe_images', {
+export const recipeImagesTable = pgTable('recipe_images', {
 	id: serial('id').primaryKey(),
-	recipeId: serial('recipe_id').references(() => recipes.id, {
+	recipeId: serial('recipe_id').references(() => recipesTable.id, {
 		onDelete: 'cascade',
 	}),
 	image: bytea('image').notNull(),
@@ -52,9 +52,9 @@ export const recipeImages = pgTable('recipe_images', {
 	order: integer('order').notNull(),
 });
 
-export const recipeNotes = pgTable('recipe_notes', {
+export const recipeNotesTable = pgTable('recipe_notes', {
 	id: serial('id').primaryKey(),
-	recipeId: serial('recipe_id').references(() => recipes.id, {
+	recipeId: serial('recipe_id').references(() => recipesTable.id, {
 		onDelete: 'cascade',
 	}),
 	note: text('note').notNull(),

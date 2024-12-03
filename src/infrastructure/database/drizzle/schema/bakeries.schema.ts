@@ -7,7 +7,7 @@ import {
 	timestamp,
 	varchar,
 } from 'drizzle-orm/pg-core';
-import { products } from './products.schema';
+import { productsTable } from './products.schema';
 import bytea from './types/bytea';
 
 export const bakeriesTable = pgTable('bakeries', {
@@ -49,7 +49,7 @@ export const bakeryMenuItemsTable = pgTable('bakery_menu_items', {
 			onDelete: 'cascade',
 		})
 		.notNull(),
-	productId: serial('product_id').references(() => products.id, {
+	productId: serial('product_id').references(() => productsTable.id, {
 		onDelete: 'cascade',
 	}),
 });

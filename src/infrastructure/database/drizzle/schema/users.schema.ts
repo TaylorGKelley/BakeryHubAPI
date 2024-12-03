@@ -1,5 +1,6 @@
 import {
 	boolean,
+	integer,
 	pgTable,
 	serial,
 	timestamp,
@@ -18,6 +19,7 @@ export const usersTable = pgTable('users', {
 		.notNull()
 		.defaultNow(),
 	lastLogin: timestamp('last_login').notNull().defaultNow(),
+	refreshTokenVersion: integer('refresh_token_version').notNull().default(0),
 	createdAt: timestamp('created_at').notNull().defaultNow(),
 	updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });

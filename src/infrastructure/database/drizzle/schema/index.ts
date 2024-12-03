@@ -1,16 +1,16 @@
 export {
-	bakeries,
-	bakeryMenuSections,
-	bakeryMenuItems,
-	bakeryImages,
-	bakeryFavorites,
+	bakeriesTable,
+	bakeryMenuSectionsTable,
+	bakeryMenuItemsTable,
+	bakeryImagesTable,
+	bakeryFavoritesTable,
 } from './bakeries.schema';
-export { products, productImages } from './products.schema';
+export { productsTable, productImagesTable } from './products.schema';
 export {
-	recipes,
-	recipeIngredients,
-	recipeSteps,
-	recipeImages,
+	recipesTable,
+	recipeIngredientsTable,
+	recipeStepsTable,
+	recipeImagesTable,
 } from './recipes.schema';
-export { reviews } from './reviews.schema';
-export { users } from './users.schema';
+export { reviewsTable } from './reviews.schema';
+export { usersTable } from './users.schema';

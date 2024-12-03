@@ -1,15 +1,13 @@
-import { RequestHandler } from 'express';
 import { AppError } from '../../shared/errors/appError';
+import { AuthenticatedRequestHandler } from '../../domain/types/Request/AuthenticatedRequestHandler';
 
-export const authenticated: RequestHandler<
-	any,
-	any,
-	any,
-	any,
-	{ user: { id: number } }
-> = (req, res, next) => {
+export const protectedRoute: AuthenticatedRequestHandler = (
+	req,
+	_res,
+	next
+) => {
 	try {
-		if (req.app.locals.user) {
+		if (req.user) {
 			next();
 		} else {
 			throw new AppError(401, 'Unauthorized');

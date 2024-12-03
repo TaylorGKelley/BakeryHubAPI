@@ -3,16 +3,11 @@ import {
 	getAllBakeries,
 	getBakery,
 	createBakery,
-	updateBakery,
-	deleteBakery,
-} from '../controllers/bakery.controller';
+} from '../../controllers/bakery';
 
 const router = Router();
 
 router.get('/', getAllBakeries).post('/', createBakery);
-router
-	.get('/:bakeryId', getBakery)
-	.patch('/:bakeryId', updateBakery)
-	.delete('/:bakeryId', deleteBakery);
+router.get('/:bakeryId', getBakery);
 
 export default router;
