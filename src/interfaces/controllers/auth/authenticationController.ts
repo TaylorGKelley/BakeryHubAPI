@@ -4,30 +4,43 @@ import { ProtectedUser, User } from '../../../domain/entities/User';
 import { AppError } from '../../../shared/errors/appError';
 import { verifyPassword } from '../../../application/useCases/auth/emailAuthentication';
 import { createSession } from '../../../application/useCases/auth/session';
+import { AuthenticatedRequestHandler } from '../../../domain/types/Request/AuthenticatedRequestHandler';
+import { hashPassword } from '../../../application/utils/hashPassword';
 
-export const signUp: RequestHandler<
+export const emailRegister: RequestHandler<
 	{},
 	UserResponse,
 	{
+		firstName: string;
+		lastName: string;
 		email: string;
 		password: string;
-		passwordConfirm: string;
 	}
 > = async (req, res, next) => {
 	try {
+		const { firstName, lastName, email, password } = req.body;
+
+		if (!firstName || !lastName || !email || !password)
+			throw new AppError(400, 'Missing required fields');
+
 		const newUser = new User();
 
 		// Check if user exists
-		newUser.find(req.body.email);
+		await newUser.find(email);
 		if (newUser.id) throw new AppError(401, 'User already exists');
 
-		// TODO: Create User in DB
+		// Hash password
+		const hashedPassword = await hashPassword(password);
 
-		// TODO: set cookies
+		// Create user in DB
+		newUser.create(firstName, lastName, email, hashedPassword);
+
+		// Create auth session and send cookies
+		await createSession(res, newUser);
 
 		res.json({
 			success: true,
-			message: 'User Logged in successfully',
+			message: 'User Created successfully',
 			user: new ProtectedUser(newUser),
 		});
 	} catch (error) {
@@ -35,7 +48,7 @@ export const signUp: RequestHandler<
 	}
 };
 
-export const login: RequestHandler<
+export const emailLogin: RequestHandler<
 	{},
 	UserResponse,
 	{
@@ -52,7 +65,7 @@ export const login: RequestHandler<
 		const user = new User();
 
 		// Check if user exists
-		user.find(email);
+		await user.find(email);
 		if (!user.id) throw new AppError(401, 'User does not exist');
 
 		// Check if password is correct
@@ -66,6 +79,22 @@ export const login: RequestHandler<
 			success: true,
 			message: 'User Logged in successfully',
 			user: new ProtectedUser(user),
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const refreshToken: AuthenticatedRequestHandler<
+	RequestHandler<{}, UserResponse, {}>
+> = async (req, res, next) => {
+	try {
+		await createSession(res, req.user);
+
+		res.json({
+			success: true,
+			message: 'Token refreshed successfully',
+			user: new ProtectedUser(req.user),
 		});
 	} catch (error) {
 		next(error);

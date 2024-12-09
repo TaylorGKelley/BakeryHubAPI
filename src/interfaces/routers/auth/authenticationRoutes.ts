@@ -1,8 +1,16 @@
-import { Router } from 'express';
-import { login } from '../../controllers/auth/emailAuthenticationController';
+import { RequestHandler, Router } from 'express';
+import {
+	emailLogin,
+	emailRegister,
+	refreshToken,
+} from '../../controllers/auth/authenticationController';
+import protectedRoute from '../../middleware/protectedRoute';
 
 const auth = Router();
 
-auth.post('/login', login);
+auth.post('/register', emailRegister);
+auth.post('/login', emailLogin);
+
+auth.post('/refresh', protectedRoute, refreshToken as RequestHandler);
 
 export default auth;

@@ -3,40 +3,64 @@ import jwt from 'jsonwebtoken';
 import { User } from '../../../domain/entities/User';
 import db from '../../../infrastructure/database/drizzle';
 import { eq } from 'drizzle-orm';
-import usersTable from '../../../infrastructure/database/drizzle/schema/users.schema';
+import { usersTable } from '../../../infrastructure/database/drizzle/schema/users.schema';
 import { AppError } from '../../../shared/errors/appError';
 
 export type RefreshTokenData = {
-	userId: string;
-	refreshTokenVersion?: number;
+	userId: number;
+	refreshTokenVersion: number;
 };
 
 export type AccessTokenData = {
-	userId: string;
+	userId: number;
 };
 
 const cookieSettings = {
 	httpOnly: true,
 	sameSite: 'lax',
+	secure: process.env.NODE_ENV === 'production',
+	maxAge: 30 * 24 * 60 * 60 * 1000,
 } as const;
+
+const validateTokenSecrets = () => {
+	if (
+		!process.env.ACCESS_TOKEN_SECRET ||
+		process.env.ACCESS_TOKEN_SECRET.length < 32
+	) {
+		throw new Error('Invalid ACCESS_TOKEN_SECRET');
+	}
+	if (
+		!process.env.REFRESH_TOKEN_SECRET ||
+		process.env.REFRESH_TOKEN_SECRET.length < 32
+	) {
+		throw new Error('Invalid REFRESH_TOKEN_SECRET');
+	}
+};
 
 const createAuthTokens = (
 	user: User
 ): { refreshToken: string; accessToken: string } => {
+	validateTokenSecrets();
+
+	const now = Math.floor(Date.now() / 1000);
+
 	const refreshToken = jwt.sign(
-		{ userId: user.id, refreshTokenVersion: user.refreshTokenVersion },
-		process.env.REFRESH_TOKEN_SECRET!,
 		{
-			expiresIn: '30d',
-		}
+			userId: user.id,
+			refreshTokenVersion: user.refreshTokenVersion,
+			iat: now,
+		} as RefreshTokenData,
+		process.env.REFRESH_TOKEN_SECRET!,
+		{ expiresIn: '30d' }
 	);
 
 	const accessToken = jwt.sign(
-		{ userId: user.id },
-		process.env.ACCESS_TOKEN_SECRET!,
 		{
-			expiresIn: '15min',
-		}
+			userId: user.id,
+			iat: now,
+		} as AccessTokenData,
+		process.env.ACCESS_TOKEN_SECRET!,
+		{ expiresIn: '15m' }
 	);
 
 	return { refreshToken, accessToken };
@@ -74,7 +98,7 @@ export const checkTokens = async (
 	}
 
 	if (!refreshToken) {
-		throw new AppError(401, 'Unauthorized');
+		throw new AppError(401, 'Refresh token is required');
 	}
 
 	// Verify refresh token
@@ -84,17 +108,17 @@ export const checkTokens = async (
 			jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!)
 		);
 	} catch {
-		throw new AppError(401, 'Unauthorized');
+		throw new AppError(401, 'Invalid refresh token');
 	}
 
 	// Get user
-	const user = await db.query.usersTable.findFirst({
-		where: eq(usersTable.id, data.userId),
-	});
+	const user = (
+		await db.select().from(usersTable).where(eq(usersTable.id, data.userId))
+	).at(0);
 
 	// Check refresh token version
 	if (!user || user.refreshTokenVersion !== data.refreshTokenVersion) {
-		throw new AppError(401, 'Unauthorized');
+		throw new AppError(401, 'Invalid refresh token');
 	}
 
 	return {
