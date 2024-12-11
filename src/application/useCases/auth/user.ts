@@ -1,16 +1,21 @@
+import { AppError } from '../../../domain/entities/appError';
 import { User } from '../../../domain/entities/User';
 import db from '../../../infrastructure/database/drizzle';
 import { usersTable } from '../../../infrastructure/database/drizzle/schema/users.schema';
 import { eq } from 'drizzle-orm';
 
 export const findUserByEmail = async (email: string) => {
-	const user = await db
-		.select()
-		.from(usersTable)
-		.where(eq(usersTable.email, email))
-		.limit(1);
+	try {
+		const user = await db
+			.select()
+			.from(usersTable)
+			.where(eq(usersTable.email, email))
+			.limit(1);
 
-	return user.at(0) as User | undefined;
+		return user.at(0) as User | undefined;
+	} catch (error) {
+		throw new AppError(500, error.message);
+	}
 };
 
 export const createUser = async (

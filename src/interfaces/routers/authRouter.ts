@@ -20,16 +20,23 @@ authRouter.post('/register', async (req, res, next) => {
 			throw new AppError(400, `Missing ${!email ? 'email' : 'password'}`);
 		}
 
-		const newUser = await new User();
+		console.log('registering user');
+
+		const newUser = new User();
+
+		await newUser.find(email);
+		console.log(newUser);
 
 		if (!(await newUser.find(email))) {
+			console.log('User already exists');
 			throw new AppError(401, 'User already exists');
 		}
-
+		console.log('creating user');
 		await newUser.create(firstName, lastName, email, password);
 
+		console.log('User created', newUser);
 		req.login(newUser, (err) => {
-			if (err) return next(err);
+			if (err) throw new AppError(400, err);
 
 			if (req.accepts('json')) {
 				res.json({
@@ -42,6 +49,7 @@ authRouter.post('/register', async (req, res, next) => {
 			}
 		});
 	} catch (error) {
+		console.error(error.message);
 		next(error);
 	}
 });

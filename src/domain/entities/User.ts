@@ -8,6 +8,9 @@ import { AppError } from '../../domain/entities/appError';
 
 export class User {
 	public id?: number;
+	public googleId?: string;
+	public githubId?: string;
+	public appleId?: string;
 	public firstName?: string;
 	public lastName?: string;
 	public email?: string;
@@ -26,13 +29,18 @@ export class User {
 	}
 
 	public async find(email: string) {
-		const user = await findUserByEmail(email);
+		try {
+			console.log('finding new user');
+			const user = await findUserByEmail(email);
+			console.log(user?.id);
+			if (!user) return;
 
-		if (!user) return;
+			Object.assign(this, { ...user, password: undefined });
 
-		Object.assign(this, { ...user, password: undefined });
-
-		return this;
+			return this;
+		} catch (error) {
+			throw new AppError(500, error.message);
+		}
 	}
 
 	public async verifyPassword(password: string) {
