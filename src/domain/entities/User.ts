@@ -4,7 +4,7 @@ import {
 	findUserByEmail,
 } from '../../application/useCases/auth/user';
 import { hashPassword } from '../../application/utils/hashPassword';
-import { AppError } from '../../shared/errors/appError';
+import { AppError } from '../../domain/entities/appError';
 
 export class User {
 	public id?: number;

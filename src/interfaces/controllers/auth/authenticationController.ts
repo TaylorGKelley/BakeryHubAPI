@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express';
 import { UserResponse } from '../../../application/dtos/Response';
 import { ProtectedUser, User } from '../../../domain/entities/User';
-import { AppError } from '../../../shared/errors/appError';
+import { AppError } from '../../../domain/entities/appError';
 import { verifyPassword } from '../../../application/useCases/auth/emailAuthentication';
 import { createSession } from '../../../application/useCases/auth/session';
 import { AuthenticatedRequestHandler } from '../../../domain/types/Request/AuthenticatedRequestHandler';

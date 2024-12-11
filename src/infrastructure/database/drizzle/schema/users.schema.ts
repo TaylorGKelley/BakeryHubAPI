@@ -4,12 +4,16 @@ import {
 	pgTable,
 	serial,
 	timestamp,
+	uuid,
 	varchar,
 } from 'drizzle-orm/pg-core';
 import { bakeriesTable } from './bakeries.schema';
 
 export const usersTable = pgTable('users', {
 	id: serial('id').primaryKey(),
+	googleId: uuid('google_id'),
+	githubId: uuid('google_id'),
+	appleId: uuid('google_id'),
 	firstName: varchar('first_name', { length: 256 }).notNull(),
 	lastName: varchar('last_name', { length: 256 }).notNull(),
 	email: varchar('email', { length: 256 }).notNull(),

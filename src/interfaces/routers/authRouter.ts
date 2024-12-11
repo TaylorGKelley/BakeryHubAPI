@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { AppError } from '../../shared/errors/appError';
+import { AppError } from '../../domain/entities/appError';
 import { User } from '../../domain/entities/User';
 
 const authRouter = Router();

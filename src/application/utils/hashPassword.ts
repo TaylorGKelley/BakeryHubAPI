@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { AppError } from '../../shared/errors/appError';
+import { AppError } from '../../domain/entities/appError';
 
 export const hashPassword = async (password: string): Promise<string> => {
 	const salt = await bcrypt.genSalt(10);

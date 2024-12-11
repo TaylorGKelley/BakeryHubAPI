@@ -1,5 +1,5 @@
 import rateLimit from 'express-rate-limit';
-import { AppError } from '../../shared/errors/appError';
+import { AppError } from '../../domain/entities/appError';
 
 // General rate limiter
 export const generalLimiter = rateLimit({

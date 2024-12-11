@@ -6,8 +6,8 @@ import authEmailUser from './authEmailUser';
 import db from '../database/drizzle';
 import { eq } from 'drizzle-orm';
 import { usersTable } from '../database/drizzle/schema/users.schema';
-import { AppError } from '../../shared/errors/appError';
 import { User } from '../../domain/entities/User';
+import { AppError } from '../../domain/entities/appError';
 
 passport.use(new LocalStrategy(authEmailUser));
 
@@ -27,7 +27,7 @@ passport.deserializeUser(async (id, done) => {
 		const user = result[0];
 
 		if (!user) {
-			return done(new AppError(404, 'User not found'));
+			throw new AppError(404, 'User not found');
 		}
 
 		done(null, user); // Attach the user object to `req.user`

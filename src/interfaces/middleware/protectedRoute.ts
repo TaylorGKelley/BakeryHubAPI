@@ -1,4 +1,4 @@
-import { AppError } from '../../shared/errors/appError';
+import { AppError } from '../../domain/entities/appError';
 import { RequestHandler } from 'express';
 
 const protectedRoute: RequestHandler = async (req, res, next) => {
