@@ -1,4 +1,4 @@
-import { verifyPassword } from '../../application/useCases/auth/emailAuthentication';
+import { verifyPassword } from '../../application/useCases/auth/verifyPassword';
 import {
 	createUser,
 	findUserByEmail,
