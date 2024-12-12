@@ -30,12 +30,10 @@ export class User {
 
 	public async find(email: string) {
 		try {
-			console.log('finding new user');
 			const user = await findUserByEmail(email);
-			console.log(user?.id);
 			if (!user) return;
 
-			Object.assign(this, { ...user, password: undefined });
+			Object.assign(this, { ...user });
 
 			return this;
 		} catch (error) {

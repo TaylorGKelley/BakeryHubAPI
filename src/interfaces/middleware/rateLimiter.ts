@@ -32,19 +32,3 @@ export const authLimiter = rateLimit({
 		);
 	},
 });
-
-// Specific limiter for refresh token endpoints
-export const refreshTokenLimiter = rateLimit({
-	windowMs: 60 * 60 * 1000, // 1 hour
-	max: 10, // Limit each IP to 10 refresh attempts per hour
-	message: 'Too many refresh token attempts, please try again later',
-	headers: true,
-	handler: (req, res, next) => {
-		next(
-			new AppError(
-				429,
-				'Too many refresh token attempts, please try again later'
-			)
-		);
-	},
-});

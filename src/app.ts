@@ -13,16 +13,13 @@ import {
 	productInfoRoutes,
 	recipeInfoRoutes,
 } from './interfaces/routers/info';
-import authenticationRoutes from './interfaces/routers/auth/authenticationRoutes';
 import {
 	authLimiter,
 	generalLimiter,
-	refreshTokenLimiter,
 } from './interfaces/middleware/rateLimiter';
 import cookieParser from 'cookie-parser';
-import session from 'express-session';
+import configureSession from './interfaces/middleware/configureSession';
 import passport from './infrastructure/passport';
-import DrizzleSessionStore from './infrastructure/database/drizzle/DrizzleSessionStore';
 import authRouter from './interfaces/routers/authRouter';
 
 const app = express();
@@ -31,22 +28,13 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Authentication
-app.use(
-	session({
-		secret: process.env.SESSION_SECRET!,
-		resave: false,
-		saveUninitialized: false,
-		store: new DrizzleSessionStore(),
-		cookie: {
-			secure: process.env.NODE_ENV === 'production',
-			sameSite: 'lax',
-		},
-	})
-);
-// Passport
+app.use(configureSession());
+
+// Initialize passport
 app.use(passport.initialize());
 app.use(passport.session());
 
+// CORS options
 const corsOptions: cors.CorsOptions = {
 	origin: '*',
 };
@@ -55,7 +43,6 @@ app.use(cors(corsOptions));
 // Rate limiters
 app.use(generalLimiter);
 app.use('/auth/*', authLimiter);
-app.use('/auth/refresh', refreshTokenLimiter);
 
 /* 
 	Initializing Routes

@@ -1,10 +1,6 @@
-import { AuthenticatedRequestHandler } from '../../../domain/types/Request/AuthenticatedRequestHandler';
+import { RequestHandler } from 'express';
 
-export const getMyInfo: AuthenticatedRequestHandler = async (
-	req,
-	res,
-	next
-) => {
+export const getMyInfo: RequestHandler = async (req, res, next) => {
 	res.status(200).json({
 		success: true,
 		message: 'User fetched successfully',
@@ -12,11 +8,7 @@ export const getMyInfo: AuthenticatedRequestHandler = async (
 	});
 };
 
-export const updateMyInfo: AuthenticatedRequestHandler = async (
-	req,
-	res,
-	next
-) => {
+export const updateMyInfo: RequestHandler = async (req, res, next) => {
 	res.status(200).json({
 		success: true,
 		message: 'User updated successfully',

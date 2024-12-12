@@ -5,13 +5,33 @@ import { User } from '../../domain/entities/User';
 
 const authRouter = Router();
 
-authRouter.post(
-	'/login',
-	passport.authenticate('local', {
-		successRedirect: `${process.env.CLIENT_URL!}/auth/success`,
-		failureRedirect: `${process.env.CLIENT_URL!}/auth/failure`,
-	})
-);
+authRouter.post('/login', async (req, res, next) => {
+	try {
+		await passport.authenticate('local', (err, user, info) => {
+			if (err) throw new AppError(500, err.message);
+			if (!user) throw new AppError(401, 'Invalid credentials');
+
+			req.login(user, (loginErr) => {
+				if (loginErr)
+					return res
+						.status(500)
+						.json({ success: false, message: `Login failed: ${loginErr}` });
+
+				if (req.accepts('json')) {
+					res.json({
+						success: true,
+						message: 'User successfully logged in',
+						redirectTo: '/auth/success',
+					});
+				} else {
+					res.redirect(`${process.env.CLIENT_URL!}/auth/success`);
+				}
+			});
+		})(req, res, next);
+	} catch (error) {
+		next(error);
+	}
+});
 
 authRouter.post('/register', async (req, res, next) => {
 	try {
@@ -20,21 +40,15 @@ authRouter.post('/register', async (req, res, next) => {
 			throw new AppError(400, `Missing ${!email ? 'email' : 'password'}`);
 		}
 
-		console.log('registering user');
-
 		const newUser = new User();
 
 		await newUser.find(email);
-		console.log(newUser);
 
-		if (!(await newUser.find(email))) {
-			console.log('User already exists');
-			throw new AppError(401, 'User already exists');
+		if (newUser.id) {
+			throw new AppError(409, 'User already exists');
 		}
-		console.log('creating user');
 		await newUser.create(firstName, lastName, email, password);
 
-		console.log('User created', newUser);
 		req.login(newUser, (err) => {
 			if (err) throw new AppError(400, err);
 
@@ -49,7 +63,6 @@ authRouter.post('/register', async (req, res, next) => {
 			}
 		});
 	} catch (error) {
-		console.error(error.message);
 		next(error);
 	}
 });

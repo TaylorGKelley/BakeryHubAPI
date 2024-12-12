@@ -8,7 +8,7 @@ import {
 
 const userManagement = Router();
 
-userManagement.get('/', protectedRoute, getMyInfo as RequestHandler);
-userManagement.put('/', protectedRoute, updateMyInfo as RequestHandler);
+userManagement.get('/', protectedRoute, getMyInfo);
+userManagement.put('/', protectedRoute, updateMyInfo);
 
 export default userManagement;
