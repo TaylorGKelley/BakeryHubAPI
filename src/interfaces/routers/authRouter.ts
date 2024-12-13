@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import passport from 'passport';
+import passport from '../../infrastructure/passport';
 import { AppError } from '../../domain/entities/appError';
 import { User } from '../../domain/entities/User';
 
 const authRouter = Router();
 
 authRouter.post('/login', async (req, res, next) => {
-	try {
-		await passport.authenticate('local', (err, user, info) => {
+	await passport.authenticate('local', (err, user, info) => {
+		try {
 			if (err) throw new AppError(500, err.message);
 			if (!user) throw new AppError(401, 'Invalid credentials');
 
@@ -27,10 +27,10 @@ authRouter.post('/login', async (req, res, next) => {
 					res.redirect(`${process.env.CLIENT_URL!}/auth/success`);
 				}
 			});
-		})(req, res, next);
-	} catch (error) {
-		next(error);
-	}
+		} catch (error) {
+			next(error);
+		}
+	})(req, res, next);
 });
 
 authRouter.post('/register', async (req, res, next) => {
