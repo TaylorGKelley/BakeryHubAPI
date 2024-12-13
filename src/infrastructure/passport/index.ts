@@ -2,14 +2,14 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as AppleStrategy } from 'passport-apple';
-import localAuthentication from './localsAuthentication';
+import localAuthentication from './localAuthentication';
+import googleAuthentication from './googleAuthentication';
+import appleAuthentication from './appleAuthentication';
 import db from '../database/drizzle';
 import { eq } from 'drizzle-orm';
 import { usersTable } from '../database/drizzle/schema/users.schema';
 import { User } from '../../domain/entities/User';
 import { AppError } from '../../domain/entities/appError';
-import googleAuthentication from './googleAuthentication';
-import appleAuthentication from './appleAuthentication';
 
 passport.use(new LocalStrategy(localAuthentication));
 passport.use(

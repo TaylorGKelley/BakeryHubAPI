@@ -1,5 +1,6 @@
 import { verifyPassword } from '../../application/useCases/auth/verifyPassword';
 import {
+	createGoogleUser,
 	createUser,
 	findUserByEmail,
 } from '../../application/useCases/auth/user';
@@ -28,7 +29,7 @@ export class User {
 		Object.assign(this, user);
 	}
 
-	public async find(email: string) {
+	public async findByEmail(email: string) {
 		try {
 			const user = await findUserByEmail(email);
 			if (!user) return;
@@ -40,6 +41,8 @@ export class User {
 			throw new AppError(500, error.message);
 		}
 	}
+
+	public async findByGoogleId(googleId: string) {}
 
 	public async verifyPassword(password: string) {
 		const isPasswordCorrect = await verifyPassword(this, password);
@@ -65,6 +68,24 @@ export class User {
 			email,
 			hashedPassword
 		);
+
+		Object.assign(this, newUser);
+
+		return this;
+	}
+
+	public async createGoogleUser({
+		firstName,
+		lastName,
+		email,
+		googleId,
+	}: Partial<User>) {
+		const newUser = await createGoogleUser({
+			firstName: firstName!,
+			lastName: lastName!,
+			email: email!,
+			googleId: googleId!,
+		});
 
 		Object.assign(this, newUser);
 

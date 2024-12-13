@@ -18,6 +18,20 @@ export const findUserByEmail = async (email: string) => {
 	}
 };
 
+export const findUserByGoogleId = async (googleId: string) => {
+	try {
+		const user = await db
+			.select()
+			.from(usersTable)
+			.where(eq(usersTable.googleId, googleId))
+			.limit(1);
+
+		return user.at(0) as User | undefined;
+	} catch (error) {
+		throw new AppError(500, error.message);
+	}
+};
+
 export const createUser = async (
 	firstName: string,
 	lastName: string,
@@ -33,6 +47,17 @@ export const createUser = async (
 			password: hashedPassword,
 		})
 		.returning();
+
+	return newUser[0] as User;
+};
+
+export const createGoogleUser = async (user: {
+	firstName: string;
+	lastName: string;
+	email: string;
+	googleId: string;
+}) => {
+	const newUser = await db.insert(usersTable).values(user).returning();
 
 	return newUser[0] as User;
 };

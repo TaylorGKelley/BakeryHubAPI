@@ -42,7 +42,7 @@ authRouter.post('/register', async (req, res, next) => {
 
 		const newUser = new User();
 
-		await newUser.find(email);
+		await newUser.findByEmail(email);
 
 		if (newUser.id) {
 			throw new AppError(409, 'User already exists');

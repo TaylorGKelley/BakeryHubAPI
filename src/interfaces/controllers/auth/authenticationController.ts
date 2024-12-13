@@ -26,7 +26,7 @@ export const emailRegister: RequestHandler<
 		const newUser = new User();
 
 		// Check if user exists
-		await newUser.find(email);
+		await newUser.findByEmail(email);
 		if (newUser.id) throw new AppError(401, 'User already exists');
 
 		// Hash password
@@ -65,7 +65,7 @@ export const emailLogin: RequestHandler<
 		const user = new User();
 
 		// Check if user exists
-		await user.find(email);
+		await user.findByEmail(email);
 		if (!user.id) throw new AppError(401, 'User does not exist');
 
 		// Check if password is correct

@@ -18,7 +18,7 @@ export const usersTable = pgTable('users', {
 	lastName: varchar('last_name', { length: 256 }).notNull(),
 	email: varchar('email', { length: 256 }).notNull(),
 	emailVerified: boolean('email_verified').notNull().default(false),
-	password: varchar('password', { length: 256 }).notNull(),
+	password: varchar('password', { length: 256 }),
 	passwordLastChangedAt: timestamp('password_last_changed_at')
 		.notNull()
 		.defaultNow(),

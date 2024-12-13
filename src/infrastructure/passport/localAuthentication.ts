@@ -2,7 +2,7 @@ import { ProtectedUser, User } from '../../domain/entities/User';
 
 const authEmailUser = async (email, password, cb) => {
 	try {
-		const user = await new User().find(email);
+		const user = await new User().findByEmail(email);
 
 		if (!user) return cb(null, false);
 
