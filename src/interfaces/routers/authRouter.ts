@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import passport from '../../infrastructure/passport';
+import passport from '../../infrastructure/configurations/passport';
 import { AppError } from '../../domain/entities/appError';
 import { User } from '../../domain/entities/User';
 

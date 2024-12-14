@@ -19,7 +19,7 @@ import {
 } from './interfaces/middleware/rateLimiter';
 import cookieParser from 'cookie-parser';
 import configureSession from './interfaces/middleware/configureSession';
-import passport from './infrastructure/passport';
+import passport from './infrastructure/configurations/passport';
 import authRouter from './interfaces/routers/authRouter';
 
 const app = express();
